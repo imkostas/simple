@@ -1,278 +1,352 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en" class="dark scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIAPATHY — Kostas Terzidis</title>
+    <title>Kostas Terzidis — Diapathy & Algorithmic Architecture</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        serif: ['Georgia', 'Courier New', 'serif'],
-                        mono: ['Courier New', 'Courier', 'monospace'],
-                    },
                     colors: {
                         noir: {
-                            900: '#0a0a0a',
-                            800: '#121212',
-                            700: '#1c1c1c',
+                            900: '#050505',
+                            800: '#0d0d0d',
+                            700: '#1a1a1a',
                             300: '#a3a3a3',
-                            100: '#e5e5e5'
-                        }
+                            100: '#f5f5f5',
+                        },
+                        amberGlow: '#ffb703'
+                    },
+                    fontFamily: {
+                        mono: ['Courier New', 'Courier', 'monospace'],
+                        serif: ['Georgia', 'serif']
                     }
                 }
             }
         }
     </script>
     <style>
-        /* Film Noir Custom Shadowy & Grainy Aesthetics */
+        /* Noir atmospheric background overlay */
         body {
-            background-color: #0a0a0a;
-            color: #e5e5e5;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.95)), 
-                              url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            background-color: #050505;
+            color: #d1d5db;
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(255,255,255,0.03) 0%, transparent 60%),
+                radial-gradient(circle at 80% 80%, rgba(255,183,3,0.02) 0%, transparent 50%);
             overflow-x: hidden;
         }
-        
-        /* Venetian Blind Shadow Effect Overlay */
-        .venetian-blinds {
+
+        /* Film grain noise effect */
+        .grain {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.04"/></svg>');
+            pointer-events: none;
+            z-index: 50;
+            animation: grainAnim 0.5s steps(5) infinite;
+        }
+
+        @keyframes grainAnim {
+            0% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -5%); }
+            20% { transform: translate(-10%, 5%); }
+            30% { transform: translate(5%, -10%); }
+            40% { transform: translate(-5%, 15%); }
+            50% { transform: translate(-10%, 5%); }
+            60% { transform: translate(15%, 0); }
+            70% { transform: translate(0, 10%); }
+            80% { transform: translate(-15%, 0); }
+            90% { transform: translate(10%, 5%); }
+            100% { transform: translate(5%, 0); }
+        }
+
+        /* Noir shadow vignette */
+        .vignette {
             position: fixed;
             inset: 0;
-            background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 45%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,0) 100%);
-            background-size: 40px 100%;
+            box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.95);
             pointer-events: none;
             z-index: 40;
-            opacity: 0.4;
         }
 
-        /* Chiaroscuro spotlight effect */
-        .spotlight {
-            position: fixed;
-            top: -25%;
-            left: -25%;
-            width: 150%;
-            height: 150%;
-            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0.8) 70%);
-            pointer-events: none;
-            z-index: 10;
+        /* Randomly transformed interactive cards */
+        .noir-card {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: grayscale(100%) contrast(125%);
+        }
+        .noir-card:hover {
+            filter: grayscale(0%) contrast(100%);
+            transform: scale(1.08) rotate(0deg) !important;
+            z-index: 30 !important;
+            box-shadow: 0 0 25px rgba(255, 183, 3, 0.3);
         }
 
-        /* Noir Text Styling */
-        .noir-glow {
-            text-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
-        }
-        .noir-blur {
-            filter: blur(0.4px);
+        /* Film noir typewriter look */
+        .typewriter {
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: -0.02em;
         }
     </style>
 </head>
-<body class="font-serif selection:bg-neutral-800 selection:text-white min-h-full relative pb-24">
+<body class="min-h-screen font-mono text-gray-300 relative selection:bg-amber-500 selection:text-black">
 
-    <div class="venetian-blinds"></div>
-    <div class="spotlight"></div>
+    <!-- Atmospheric Overlays -->
+    <div class="grain"></div>
+    <div class="vignette"></div>
 
-    <nav class="fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-neutral-900 px-6 py-4">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="#" class="font-mono text-sm tracking-widest text-neutral-400 hover:text-white uppercase transition-colors">
-                DIAPATHY // TERZIDIS
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-noir-900/80 backdrop-blur-md border-b border-neutral-800">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#hero" class="text-xl font-bold tracking-widest uppercase text-white hover:text-amber-500 transition-colors">
+                [ DIAPATHY ]
             </a>
-            <div class="flex gap-6 font-mono text-xs tracking-wider">
-                <a href="#about" class="text-neutral-400 hover:text-white transition-colors">ABOUT</a>
-                <a href="#books" class="text-neutral-400 hover:text-white transition-colors">BOOKS</a>
-                <a href="#investigation" class="text-neutral-400 hover:text-white transition-colors">INVESTIGATION</a>
-                <a href="#contact" class="text-neutral-400 hover:text-white transition-colors">CONTACT</a>
-            </div>
+            <nav class="hidden md:flex space-x-8 text-sm tracking-wider uppercase">
+                <a href="#about" class="hover:text-amber-500 transition-colors">01. Persona</a>
+                <a href="#diapathy" class="hover:text-amber-500 transition-colors">02. Concept</a>
+                <a href="#works" class="hover:text-amber-500 transition-colors">03. Archive</a>
+                <a href="#contact" class="hover:text-amber-500 transition-colors">04. Contact</a>
+            </nav>
+            <button id="rearrange-btn" class="border border-neutral-700 hover:border-amber-500 text-xs px-3 py-1.5 uppercase tracking-widest text-neutral-400 hover:text-amber-400 transition-all">
+                Randomize Layout
+            </button>
         </div>
-    </nav>
+    </header>
 
-    <main class="max-w-7xl mx-auto px-6 pt-24 relative z-20">
-        
-        <header class="py-20 border-b border-neutral-900 relative">
-            <p class="font-mono text-xs text-neutral-600 tracking-widest mb-2">THE SHANGXIANG LAB / TONGJI UNIVERSITY</p>
-            <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-neutral-100 noir-glow uppercase opacity-90 select-none">
-                DIAPATHY
-            </h1>
-            <p class="text-xl max-w-xl text-neutral-400 italic mt-4 font-mono font-light leading-relaxed">
-                "The inversion of empathy. A systemic condition where human emotion is simulated, algorithmicized, and refracted back through the cold lens of automation."
-            </p>
-        </header>
+    <!-- Main Content Container -->
+    <main class="pt-24 pb-20 px-4 sm:px-8 max-w-7xl mx-auto relative z-10">
 
-        <section id="investigation" class="relative min-h-[650px] my-12 border-b border-neutral-900 bg-neutral-950/20 rounded-lg overflow-hidden">
-            <div class="absolute inset-0 p-4 pointer-events-none text-neutral-800 font-mono text-[10px] uppercase tracking-widest select-none">
-                [ Evidence Cluster // Algorithmic Noir Landscape // Intercepted Relays ]
-            </div>
-
-            <div class="absolute transition-all duration-300 hover:z-50" style="top: 8%; left: 4%; transform: rotate(-8deg) scale(0.95);">
-                <a href="https://www.researchgate.net/profile/Kostas-Terzidis" target="_blank" class="block bg-neutral-900/60 p-2 border border-neutral-800 text-neutral-400 hover:text-white hover:border-neutral-500 font-mono text-xs uppercase tracking-wider noir-blur">
-                    → ResearchGate // Profile
-                </a>
-            </div>
-
-            <div class="absolute transition-all duration-300 hover:z-50" style="top: 15%; right: 8%; transform: rotate(12deg) scale(1.4);">
-                <span class="text-white text-4xl font-black tracking-widest opacity-20 select-none font-serif block">康思大</span>
-            </div>
-
-            <div class="absolute transition-all duration-300 hover:z-50" style="top: 28%; left: 45%; transform: rotate(-3deg) scale(1.15);">
-                <a href="https://www.linkedin.com/in/kostas-terzidis-3349127" target="_blank" class="block text-neutral-200 hover:text-red-500 font-serif font-bold text-2xl tracking-tight underline decoration-neutral-700">
-                    Linkedin Intel
-                </a>
-            </div>
-
-            <div class="absolute transition-all duration-300 hover:z-50" style="bottom: 12%; left: 8%; transform: rotate(18deg) scale(0.85);">
-                <a href="https://www.youtube.com/@imkostas1" target="_blank" class="block bg-white text-black font-mono font-bold text-xs p-1 tracking-tighter uppercase hover:bg-neutral-300">
-                    YOUTUBE LOGS [REDACTED]
-                </a>
-            </div>
-
-            <div class="absolute transition-all duration-300 hover:z-50" style="top: 45%; left: 12%; transform: rotate(-15deg) scale(1.1);">
-                <p class="text-neutral-500 max-w-xs text-xs font-mono leading-tight">
-                    "Previously: Associate Professor at Harvard University GSD (2003-2011) and Assistant Professor at UCLA (1995-2003)."
+        <!-- Hero / Intro Section -->
+        <section id="hero" class="min-h-[70vh] flex flex-col justify-center items-start my-12 relative">
+            <div class="max-w-3xl border-l-2 border-amber-500 pl-6 py-2">
+                <p class="text-amber-500 text-sm tracking-widest uppercase mb-2">Shadows & Algorithms</p>
+                <h1 class="text-4xl sm:text-6xl font-serif font-bold text-white tracking-tight leading-tight">
+                    Prof. Kostas Terzidis
+                </h1>
+                <p class="mt-4 text-lg text-neutral-400 leading-relaxed">
+                    Professor at D&I, Tongji University & Director of ShangXiang Lab. Former Associate Professor at Harvard University GSD and Assistant Professor at UCLA. Investigating the ambiguous realm where AI, architecture, intentionality, and design collide.
                 </p>
             </div>
-
-            <div class="absolute transition-all duration-300 hover:z-50" style="bottom: 35%; right: 15%; transform: rotate(-6deg) scale(1.3);">
-                <a href="https://tinyurl.com/5n6zdfpa" target="_blank" class="block font-mono text-sm tracking-widest text-red-600 hover:text-red-400 font-bold bg-neutral-950 px-3 py-2 border border-red-950/40">
-                    TIKTOK CORRUPTED FEED ⚠
-                </a>
-            </div>
-
-            <div class="absolute transition-all duration-300 hover:z-50" style="top: 55%; right: 40%; transform: rotate(5deg) scale(0.9);">
-                <span class="font-mono text-xs text-neutral-600 uppercase block">PhD - University of Michigan // Masters - OSU</span>
-            </div>
-
-            <div class="absolute transition-all duration-300 hover:z-50" style="bottom: 8%; right: 25%; transform: rotate(14deg) scale(1.65);">
-                <a href="https://imkostas.podbean.com/" target="_blank" class="block font-serif text-3xl font-black text-neutral-300 hover:text-white lowercase tracking-tighter">
-                    podbean.audio
-                </a>
-            </div>
-
-            <div class="absolute transition-all duration-300 hover:z-50" style="top: 72%; left: 35%; transform: rotate(-1deg) scale(1.05);">
-                <span class="font-serif text-sm italic text-neutral-400 bg-neutral-900/40 p-2 block border-l-2 border-neutral-500">
-                    Current Focus: AI and Art, Kid-centric AI logic, Defiant Form.
-                </span>
-            </div>
-
-            <div class="absolute transition-all duration-300 hover:z-50" style="top: 20%; left: 25%; transform: rotate(-25deg) scale(0.75);">
-                <span class="font-mono text-neutral-700 tracking-widest text-xs block">ARISTOTLE UNIVERSITY DIPLOMA // VERIFIED</span>
-            </div>
-        </section>
-
-        <section id="about" class="py-16 border-b border-neutral-900 grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div class="md:col-span-1">
-                <h2 class="font-mono text-xs text-neutral-500 tracking-widest uppercase mb-4">// SUBJECT DOSSIER</h2>
-                <p class="text-3xl font-bold text-neutral-200 tracking-tight leading-none font-serif">
-                    Kostas Terzidis
-                </p>
-                <p class="text-neutral-500 font-mono text-xs mt-2">
-                    Professor, D&I, Tongji University <br>
-                    Director, ShangXiang Lab
-                </p>
-            </div>
-            <div class="md:col-span-2 space-y-6 text-neutral-400 font-serif leading-relaxed text-base">
-                <p>
-                    An operative at the threshold of computation and creative expression. Dr. Kostas Terzidis currently commands direction over the <strong class="text-neutral-200">ShangXiang Lab</strong> at Tongji University. His intellectual trajectory traces a calculated path across prime institutions of design automation.
-                </p>
-                <p>
-                    Before vanishing into the Eastern theatre of AI developments, his positions included an Associate Professorship at the <strong class="text-neutral-200">Harvard University Graduate School of Design (2003-2011)</strong> and an Assistant Professorship at <strong class="text-neutral-200">UCLA (1995-2003)</strong>. He operates equipped with a PhD from the University of Michigan, a Master's from Ohio State University, and a foundational diploma from Aristotle University.
-                </p>
-            </div>
-        </section>
-
-        <section id="books" class="py-16 border-b border-neutral-900">
-            <h2 class="font-mono text-xs text-neutral-500 tracking-widest uppercase mb-8">// BIBLIOGRAPHIC ARTIFACTS (SOLE AUTHOR)</h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                <div class="bg-neutral-900/30 border border-neutral-900 hover:border-neutral-700 p-6 transition-all flex flex-col justify-between group">
-                    <div>
-                        <span class="font-mono text-[10px] text-neutral-600 block mb-4">ROUTLEDGE // 2014</span>
-                        <h3 class="text-xl font-bold text-neutral-200 group-hover:text-white tracking-tight font-serif">
-                            Permutation Design
-                        </h3>
-                        <p class="text-xs text-neutral-500 font-mono mt-3 leading-snug">
-                            An analysis of algorithmic generation, structural alternatives, and permutations in physical systems.
-                        </p>
-                    </div>
-                    <span class="text-[9px] font-mono text-neutral-700 mt-8 block tracking-widest">ISBN LOG: CLASSIFIED</span>
-                </div>
+            <div class="mt-8 flex gap-4 text-xs tracking-widest">
+                <span class="bg-neutral-800 border border-neutral-700 text-neutral-300 px-3 py-1">PhD Univ. of Michigan</span>
+                <span class="bg-neutral-800 border border-neutral-700 text-neutral-300 px-3 py-1">Masters OSU</span>
+                <span class="bg-neutral-800 border border-neutral-700 text-neutral-300 px-3 py-1">Aristotle Univ.</span>
+            </div>
+        </section>
 
-                <div class="bg-neutral-900/30 border border-neutral-900 hover:border-neutral-700 p-6 transition-all flex flex-col justify-between group">
-                    <div>
-                        <span class="font-mono text-[10px] text-neutral-600 block mb-4">WILEY // 2009</span>
-                        <h3 class="text-xl font-bold text-neutral-200 group-hover:text-white tracking-tight font-serif">
-                            Algorithms for Visual Design
-                        </h3>
-                        <p class="text-xs text-neutral-500 font-mono mt-3 leading-snug">
-                            Deconstruction of visual literacy using programmatic scripting, syntax, and processing fundamentals.
-                        </p>
-                    </div>
-                    <span class="text-[9px] font-mono text-neutral-700 mt-8 block tracking-widest">ISBN LOG: CLASSIFIED</span>
+        <!-- About Section -->
+        <section id="about" class="my-24 py-12 border-t border-neutral-800">
+            <h2 class="text-2xl font-serif text-white tracking-widest uppercase mb-8 flex items-center gap-3">
+                <span class="text-amber-500">01.</span> Persona & Legacy
+            </h2>
+            <div class="grid md:grid-cols-3 gap-8 items-center">
+                <div class="md:col-span-1">
+                    <img src="image_agent_tag_7907968556002795030" alt="Prof. Kostas Terzidis" class="w-full rounded shadow-2xl filter grayscale contrast-125 border border-neutral-800 hover:filter-none transition-all duration-500" />
                 </div>
+                <div class="md:col-span-2 space-y-4 text-neutral-400 leading-relaxed">
+                    <p>
+                        Kostas Terzidis is a pioneer in algorithmic architecture and generative design. Having taught at UCLA and Harvard GSD for over a decade, his work delves deep into the computational logic of visual form.
+                    </p>
+                    <p>
+                        He is the sole author of four foundational texts in the field: <em>Permutation Design</em> (Routledge: 2014), <em>Algorithms for Visual Design</em> (Wiley: 2009), <em>Algorithmic Architecture</em> (Architectural Press: 2006), and <em>Expressive Form</em> (Spon: 2003).
+                    </p>
+                    <p>
+                        His current focus centers on Artificial Intelligence and Art, establishing conferences, courses for kids & AI, and groundbreaking theoretical research into algorithmic intentionality.
+                    </p>
+                </div>
+            </div>
+        </section>
 
-                <div class="bg-neutral-900/30 border border-neutral-900 hover:border-neutral-700 p-6 transition-all flex flex-col justify-between group">
-                    <div>
-                        <span class="font-mono text-[10px] text-neutral-600 block mb-4">ARCHITECTURAL PRESS // 2006</span>
-                        <h3 class="text-xl font-bold text-neutral-200 group-hover:text-white tracking-tight font-serif">
-                            Algorithmic Architecture
-                        </h3>
-                        <p class="text-xs text-neutral-500 font-mono mt-3 leading-snug">
-                            The seminal text targeting the critical distinction between computer-aided design and algorithmic creation.
-                        </p>
-                    </div>
-                    <span class="text-[9px] font-mono text-neutral-700 mt-8 block tracking-widest">ISBN LOG: CLASSIFIED</span>
+        <!-- Diapathy Concept Section -->
+        <section id="diapathy" class="my-24 py-12 border-t border-neutral-800">
+            <div class="max-w-2xl">
+                <h2 class="text-2xl font-serif text-white tracking-widest uppercase mb-4 flex items-center gap-3">
+                    <span class="text-amber-500">02.</span> The Concept of Diapathy
+                </h2>
+                <p class="text-neutral-400 leading-relaxed mb-6">
+                    A conceptual framework formulated by Kostas Terzidis exploring the nuanced space between empathy, apathy, and artificial consciousness in generative design.
+                </p>
+            </div>
+            <div class="relative min-h-[300px] bg-noir-800/40 border border-neutral-800 rounded p-6 flex items-center justify-center overflow-hidden">
+                <img src="image_agent_tag_7907968556002795172" alt="Diapathy AI Art Concept" class="absolute inset-0 w-full h-full object-cover opacity-20 filter contrast-200" />
+                <div class="relative z-10 text-center max-w-lg bg-black/80 p-6 border border-neutral-700">
+                    <blockquote class="italic text-neutral-200 text-lg mb-2">
+                        "Between machine indifference and human emotional projection lies 'Diapathy'—the generative synthesis of artificial agency and architectural intuition."
+                    </blockquote>
+                    <span class="text-amber-500 text-xs tracking-widest uppercase">— ShangXiang Lab Research</span>
                 </div>
+            </div>
+        </section>
 
-                <div class="bg-neutral-900/30 border border-neutral-900 hover:border-neutral-700 p-6 transition-all flex flex-col justify-between group">
-                    <div>
-                        <span class="font-mono text-[10px] text-neutral-600 block mb-4">SPON // 2003</span>
-                        <h3 class="text-xl font-bold text-neutral-200 group-hover:text-white tracking-tight font-serif">
-                            Expressive Form
-                        </h3>
-                        <p class="text-xs text-neutral-500 font-mono mt-3 leading-snug">
-                            A philosophical and computational gaze into the mathematical manifestation of intricate structures.
-                        </p>
-                    </div>
-                    <span class="text-[9px] font-mono text-neutral-700 mt-8 block tracking-widest">ISBN LOG: CLASSIFIED</span>
-                </div>
+        <!-- Film Noir Dispersed Links Grid Section -->
+        <section id="works" class="my-24 py-12 border-t border-neutral-800">
+            <div class="mb-12">
+                <h2 class="text-2xl font-serif text-white tracking-widest uppercase flex items-center gap-3">
+                    <span class="text-amber-500">03.</span> Scattered Archives & Links
+                </h2>
+                <p class="text-neutral-500 text-sm mt-1">
+                    Film Noir style layout: Links scattered in random locations, scale, and rotations. Hover to uncover details.
+                </p>
+            </div>
+
+            <!-- Dynamic Container for Noir Scattered Links -->
+            <div id="noir-canvas" class="relative min-h-[900px] w-full bg-noir-800/30 border border-neutral-800/60 rounded-lg p-6 overflow-hidden">
+
+                <!-- Link 1: ResearchGate -->
+                <a href="https://www.researchgate.net/profile/Kostas-Terzidis" target="_blank" class="noir-card absolute block p-4 bg-noir-700 border border-neutral-600 rounded w-64 text-left shadow-lg">
+                    <div class="text-xs text-amber-500 font-mono uppercase tracking-wider mb-1">Academic Profile</div>
+                    <div class="text-white font-bold text-base mb-2">ResearchGate</div>
+                    <p class="text-xs text-neutral-400">Access papers on algorithmic intentionality & generative design systems.</p>
+                </a>
+
+                <!-- Link 2: LinkedIn -->
+                <a href="https://www.linkedin.com/in/kostas-terzidis-3349127" target="_blank" class="noir-card absolute block p-4 bg-noir-700 border border-neutral-600 rounded w-64 text-left shadow-lg">
+                    <div class="text-xs text-amber-500 font-mono uppercase tracking-wider mb-1">Network</div>
+                    <div class="text-white font-bold text-base mb-2">LinkedIn Profile</div>
+                    <p class="text-xs text-neutral-400">Professional background, ShangXiang Lab directorial work & teaching history.</p>
+                </a>
+
+                <!-- Link 3: Algorithmic Architecture PDF -->
+                <a href="http://ndl.ethernet.edu.et/bitstream/123456789/1750/1/39..pdf" target="_blank" class="noir-card absolute block p-3 bg-noir-700 border border-neutral-600 rounded w-72 text-left shadow-lg">
+                    <img src="image_agent_tag_7907968556002793053" alt="Algorithmic Architecture Book" class="w-full h-28 object-cover rounded mb-2 border border-neutral-800" />
+                    <div class="text-xs text-amber-500 font-mono uppercase mb-1">Book / PDF Text</div>
+                    <div class="text-white font-bold text-sm">Algorithmic Architecture</div>
+                    <p class="text-xs text-neutral-400 mt-1">Full text monograph on computational spatial frameworks.</p>
+                </a>
+
+                <!-- Link 4: Intentionality Paper -->
+                <a href="https://tinyurl.com/2sd36jr2" target="_blank" class="noir-card absolute block p-4 bg-noir-700 border border-neutral-600 rounded w-64 text-left shadow-lg">
+                    <div class="text-xs text-amber-500 font-mono uppercase mb-1">Publication</div>
+                    <div class="text-white font-bold text-base mb-2">Intentionality Paper</div>
+                    <p class="text-xs text-neutral-400">Examining AI agency and creative intent in computational art.</p>
+                </a>
+
+                <!-- Link 5: YouTube Channel -->
+                <a href="https://www.youtube.com/@imkostas1" target="_blank" class="noir-card absolute block p-4 bg-noir-700 border border-neutral-600 rounded w-64 text-left shadow-lg">
+                    <div class="text-xs text-amber-500 font-mono uppercase mb-1">Video Vault</div>
+                    <div class="text-white font-bold text-base mb-2">YouTube @imkostas1</div>
+                    <p class="text-xs text-neutral-400">Lectures, AI experiments, and computational design walkthroughs.</p>
+                </a>
+
+                <!-- Link 6: Student Work -->
+                <a href="https://www.youtube.com/watch?v=Dp-mPAY0Z1Q" target="_blank" class="noir-card absolute block p-3 bg-noir-700 border border-neutral-600 rounded w-64 text-left shadow-lg">
+                    <img src="image_agent_tag_7907968556002793195" alt="Student Work Showcase" class="w-full h-24 object-cover rounded mb-2 border border-neutral-800" />
+                    <div class="text-xs text-amber-500 font-mono uppercase mb-1">Showcase</div>
+                    <div class="text-white font-bold text-sm">Student Work</div>
+                    <p class="text-xs text-neutral-400">Generative art and computational architecture student projects.</p>
+                </a>
+
+                <!-- Link 7: Podbean Podcast -->
+                <a href="https://imkostas.podbean.com/" target="_blank" class="noir-card absolute block p-4 bg-noir-700 border border-neutral-600 rounded w-60 text-left shadow-lg">
+                    <div class="text-xs text-amber-500 font-mono uppercase mb-1">Audio / Interviews</div>
+                    <div class="text-white font-bold text-base mb-2">Podbean Podcast</div>
+                    <p class="text-xs text-neutral-400">Discussions on technology, philosophy, and creative AI.</p>
+                </a>
+
+                <!-- Link 8: Interviews Channel -->
+                <a href="https://www.youtube.com/channel/UCbxVla6_zXufOlFfqQQYTPA" target="_blank" class="noir-card absolute block p-4 bg-noir-700 border border-neutral-600 rounded w-64 text-left shadow-lg">
+                    <div class="text-xs text-amber-500 font-mono uppercase mb-1">Media Archive</div>
+                    <div class="text-white font-bold text-base mb-2">Interviews & Dialogue</div>
+                    <p class="text-xs text-neutral-400">Curated channel featuring conversations on AI and design thinking.</p>
+                </a>
+
+                <!-- Link 9: Short Videos / TikTok -->
+                <a href="https://tinyurl.com/5n6zdfpa" target="_blank" class="noir-card absolute block p-4 bg-noir-700 border border-neutral-600 rounded w-56 text-left shadow-lg">
+                    <div class="text-xs text-amber-500 font-mono uppercase mb-1">Short Clips</div>
+                    <div class="text-white font-bold text-base mb-2">TikTok Shorts</div>
+                    <p class="text-xs text-neutral-400">Bite-sized AI art demonstrations and algorithmic concepts.</p>
+                </a>
 
             </div>
         </section>
 
-        <section id="contact" class="py-16 max-w-xl mx-auto">
-            <div class="text-center mb-8">
-                <h2 class="font-mono text-xs text-neutral-500 tracking-widest uppercase mb-2">// ESTABLISH COMMS</h2>
-                <p class="text-neutral-400 font-serif text-sm italic">"Transmit telemetry. Do not expect simulated empathy."</p>
-            </div>
-
-            <form action="#" method="POST" class="space-y-6 font-mono text-xs" onsubmit="event.preventDefault(); alert('Transmission Intercepted. Data routed to ShangXiang Lab.');">
-                <div>
-                    <label class="block uppercase tracking-wider text-neutral-500 mb-2">Identify / Name</label>
-                    <input type="text" required class="w-full bg-neutral-950 border border-neutral-800 focus:border-neutral-600 text-neutral-200 p-3 outline-none transition-colors">
-                </div>
+        <!-- Contact Section -->
+        <section id="contact" class="my-24 py-12 border-t border-neutral-800">
+            <div class="max-w-xl mx-auto">
+                <h2 class="text-2xl font-serif text-white tracking-widest uppercase mb-2 text-center">
+                    Initiate Contact
+                </h2>
+                <p class="text-center text-neutral-500 text-sm mb-8">
+                    Reach out for academic inquiries, keynote lectures, or research collaborations at ShangXiang Lab.
+                </p>
                 
-                <div>
-                    <label class="block uppercase tracking-wider text-neutral-500 mb-2">Signal Destination / Email</label>
-                    <input type="email" required class="w-full bg-neutral-950 border border-neutral-800 focus:border-neutral-600 text-neutral-200 p-3 outline-none transition-colors">
-                </div>
-
-                <div>
-                    <label class="block uppercase tracking-wider text-neutral-500 mb-2">Encrypted Message</label>
-                    <textarea rows="5" required class="w-full bg-neutral-950 border border-neutral-800 focus:border-neutral-600 text-neutral-200 p-3 outline-none transition-colors resize-none"></textarea>
-                </div>
-
-                <button type="submit" class="w-full bg-neutral-200 text-black font-bold uppercase tracking-widest py-4 hover:bg-white transition-colors duration-200 shadow-lg">
-                    SUBMIT TO NODE
-                </button>
-            </form>
+                <form onsubmit="event.preventDefault(); alert('Message sent into the shadows.');" class="space-y-4 bg-noir-800/60 p-6 border border-neutral-800 rounded">
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-neutral-400 mb-1">Name</label>
+                        <input type="text" required class="w-full bg-noir-900 border border-neutral-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500" placeholder="Detective / Researcher Name">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-neutral-400 mb-1">Email</label>
+                        <input type="email" required class="w-full bg-noir-900 border border-neutral-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500" placeholder="name@domain.com">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-neutral-400 mb-1">Inquiry / Transmission</label>
+                        <textarea rows="4" required class="w-full bg-noir-900 border border-neutral-700 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500" placeholder="Type your inquiry regarding Diapathy, AI, or Algorithmic Architecture..."></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-black font-bold uppercase tracking-widest py-2.5 text-xs transition-colors">
+                        Transmit Message
+                    </button>
+                </form>
+            </div>
         </section>
-
     </main>
 
-    <footer class="absolute bottom-0 left-0 w-full text-center py-6 border-t border-neutral-950 font-mono text-[10px] text-neutral-700 tracking-widest z-20">
-        DIAPATHY © 2026 // KOSTAS TERZIDIS // ALL RIGHTS RECONFIGURED BY MACHINE LOGIC.
+    <!-- Footer -->
+    <footer class="border-t border-neutral-800 py-8 text-center text-xs text-neutral-600 relative z-10">
+        <p>© Kostas Terzidis — ShangXiang Lab, Tongji University. Film Noir Theme.</p>
     </footer>
 
+    <!-- Script for Random Noir Placement, Orientation & Scale -->
+    <script>
+        function randomizeNoirLayout() {
+            const container = document.getElementById('noir-canvas');
+            const cards = container.querySelectorAll('.noir-card');
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+
+            cards.forEach((card, index) => {
+                const cardWidth = card.offsetWidth || 250;
+                const cardHeight = card.offsetHeight || 150;
+
+                // Calculate random positions staying within container boundaries
+                const maxX = containerWidth - cardWidth - 40;
+                const maxY = containerHeight - cardHeight - 40;
+
+                const randomX = Math.max(20, Math.floor(Math.random() * maxX));
+                const randomY = Math.max(20, Math.floor(Math.random() * maxY));
+
+                // Random rotation between -18deg and +18deg
+                const randomRotate = (Math.random() * 36 - 18).toFixed(1);
+
+                // Random scale between 0.82 and 1.15
+                const randomScale = (Math.random() * 0.33 + 0.82).toFixed(2);
+
+                // Random z-index layering
+                const randomZ = Math.floor(Math.random() * 15) + 1;
+
+                // Apply styles directly
+                card.style.left = `${randomX}px`;
+                card.style.top = `${randomY}px`;
+                card.style.transform = `rotate(${randomRotate}deg) scale(${randomScale})`;
+                card.style.zIndex = randomZ;
+            });
+        }
+
+        // Initialize layout on page load and window resize
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(randomizeNoirLayout, 100);
+        });
+        window.addEventListener('resize', randomizeNoirLayout);
+
+        // Rearrange button action
+        document.getElementById('rearrange-btn').addEventListener('click', randomizeNoirLayout);
+    </script>
 </body>
 </html>
